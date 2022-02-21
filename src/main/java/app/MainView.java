@@ -4,6 +4,7 @@ import app.controllers.PreferencesController;
 import app.views.MenuBar;
 import app.controllers.MenuBarController;
 import com.formdev.flatlaf.FlatLaf;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,7 +71,6 @@ public class MainView extends JFrame {
     private void init() {
         createTextArea();
         createMenuBar();
-
     }
 
     private void createMenuBar() {

@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.components.JFontChooser;
 import app.views.MenuBar;
+import app.views.TextAreaPopUp;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -13,10 +14,7 @@ import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.io.*;
 
 public class MenuBarController {
@@ -92,6 +90,16 @@ public class MenuBarController {
 
     private void createTextAreaListeners() {
         textArea.getDocument().addDocumentListener(new TextAreaChangeAction());
+
+        TextAreaPopUp menu = new TextAreaPopUp();
+        textArea.addMouseListener(new PopUpListener(menu));
+        menu.getSaveItem().addActionListener(new SaveFileAction());
+        menu.getPasteItem().addActionListener(new PasteAction());
+        menu.getCopyItem().addActionListener(new CopySelectedAction());
+        menu.getCutItem().addActionListener(new CutSelectedAction());
+        menu.getDeleteItem().addActionListener(new DeleteSelectedAction());
+        menu.getSelectAllItem().addActionListener(new SelectAllAction());
+        menu.addPopupMenuListener(new DisableItemsPopUpAction(menu));
     }
 
     public void exit() {
@@ -328,6 +336,38 @@ public class MenuBarController {
         }
     }
 
+    class DisableItemsPopUpAction implements PopupMenuListener {
+        TextAreaPopUp menu;
+
+        public DisableItemsPopUpAction(TextAreaPopUp menu) {
+            this.menu = menu;
+        }
+
+        @Override
+        public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {
+            if (textArea.getSelectedText() == null) {
+                menu.getCopyItem().setEnabled(false);
+                menu.getDeleteItem().setEnabled(false);
+                menu.getCutItem().setEnabled(false);
+            }
+            else {
+                menu.getCopyItem().setEnabled(true);
+                menu.getDeleteItem().setEnabled(true);
+                menu.getCutItem().setEnabled(true);
+            }
+        }
+
+        @Override
+        public void popupMenuWillBecomeInvisible(PopupMenuEvent popupMenuEvent) {
+
+        }
+
+        @Override
+        public void popupMenuCanceled(PopupMenuEvent popupMenuEvent) {
+
+        }
+    }
+
     class CopySelectedAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -400,6 +440,37 @@ public class MenuBarController {
             preferencesController.setLook(theme);
 
             JOptionPane.showMessageDialog(view, "Changes will take effect on program restart");
+        }
+    }
+
+    private class PopUpListener implements MouseListener {
+        JPopupMenu menu;
+        public PopUpListener(JPopupMenu menu) {
+            this.menu = menu;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent mouseEvent) {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                menu.show(e.getComponent(),
+                        e.getX(), e.getY());
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent mouseEvent) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent mouseEvent) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent mouseEvent) {
         }
     }
 }
