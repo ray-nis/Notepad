@@ -20,20 +20,30 @@ import java.awt.event.ItemListener;
 import java.io.*;
 
 public class MenuBarController {
+    PreferencesController preferencesController;
     MenuBar view;
     JTextArea textArea;
     File file;
     boolean documentChanged = false;
     UndoManager undoManager;
 
-    public MenuBarController(MenuBar bar, JTextArea textArea) {
+    public MenuBarController(MenuBar bar, JTextArea textArea, PreferencesController preferencesController) {
         this.view = bar;
         this.textArea = textArea;
+        this.preferencesController = preferencesController;
 
         createFileMenuListeners();
         createTextAreaListeners();
         createEditMenuListeners();
         createFormatMenuListeners();
+        createViewMenuListeners();
+    }
+
+    private void createViewMenuListeners() {
+        view.getLightItem().addActionListener(new ChangeThemeAction(preferencesController.LIGHT));
+        view.getjItem().addActionListener(new ChangeThemeAction(preferencesController.LIGHT_J));
+        view.getDarkItem().addActionListener(new ChangeThemeAction(preferencesController.DARK));
+        view.getDarculaItem().addActionListener(new ChangeThemeAction(preferencesController.DARCULA));
     }
 
     private void createEditMenuListeners() {
@@ -375,6 +385,21 @@ public class MenuBarController {
         public void actionPerformed(ActionEvent actionEvent) {
             new CopySelectedAction().actionPerformed(actionEvent);
             new DeleteSelectedAction().actionPerformed(actionEvent);
+        }
+    }
+
+    class ChangeThemeAction implements ActionListener {
+        String theme;
+
+        public ChangeThemeAction(String theme) {
+            this.theme = theme;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            preferencesController.setLook(theme);
+
+            JOptionPane.showMessageDialog(view, "Changes will take effect on program restart");
         }
     }
 }

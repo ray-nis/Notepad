@@ -1,8 +1,9 @@
 package app;
 
+import app.controllers.PreferencesController;
 import app.views.MenuBar;
 import app.controllers.MenuBarController;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +14,12 @@ public class MainView extends JFrame {
     JTextArea textArea;
     MenuBar menuBar;
     MenuBarController menuBarController;
+    PreferencesController preferencesController;
 
     public MainView() {
-        FlatLightLaf.setup();
+        preferencesController = new PreferencesController();
+        FlatLaf.setup(preferencesController.getLook());
+
         setTitle("Notepad");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/image/icon.png")));
 
@@ -66,11 +70,12 @@ public class MainView extends JFrame {
     private void init() {
         createTextArea();
         createMenuBar();
+
     }
 
     private void createMenuBar() {
         menuBar = new MenuBar();
-        menuBarController = new MenuBarController(menuBar, textArea);
+        menuBarController = new MenuBarController(menuBar, textArea, preferencesController);
         setJMenuBar(menuBar);
     }
 

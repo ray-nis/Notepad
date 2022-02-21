@@ -11,6 +11,8 @@ public class MenuBar extends JMenuBar {
     JMenuItem fontItem, colorItem, backgroundColorItem;
     JMenuItem undoItem, redoItem, pasteItem, copyItem, cutItem, deleteItem, selectAllItem;
     JMenuItem findAndReplaceItem;
+    JMenu themeMenu;
+    JMenuItem lightItem, jItem, darkItem, darculaItem;
 
     public MenuBar() {
         init();
@@ -37,6 +39,21 @@ public class MenuBar extends JMenuBar {
         createFileMenu();
         createEditMenu();
         createFormatMenu();
+        createViewMenu();
+    }
+
+    private void createViewMenu() {
+        themeMenu = new JMenu("Theme");
+        lightItem = new JMenuItem("Light");
+        jItem = new JMenuItem("Light IntelliJ");
+        darkItem = new JMenuItem("Dark");
+        darculaItem = new JMenuItem("Darcula");
+
+        themeMenu.add(lightItem);
+        themeMenu.add(jItem);
+        themeMenu.add(darkItem);
+        themeMenu.add(darculaItem);
+        viewMenu.add(themeMenu);
     }
 
     private void createEditMenu() {
@@ -188,5 +205,21 @@ public class MenuBar extends JMenuBar {
 
     public JMenuItem getCutItem() {
         return cutItem;
+    }
+
+    public JMenuItem getLightItem() {
+        return lightItem;
+    }
+
+    public JMenuItem getjItem() {
+        return jItem;
+    }
+
+    public JMenuItem getDarkItem() {
+        return darkItem;
+    }
+
+    public JMenuItem getDarculaItem() {
+        return darculaItem;
     }
 }
