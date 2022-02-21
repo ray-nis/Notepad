@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.components.JFontChooser;
 import app.views.MenuBar;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -42,6 +43,10 @@ public class MenuBarController {
         view.getRedoItem().addActionListener(new RedoAction());
         view.getPasteItem().addActionListener(new PasteAction());
         view.getCopyItem().addActionListener(new CopySelectedAction());
+        view.getCutItem().addActionListener(new CutSelectedAction());
+        view.getDeleteItem().addActionListener(new DeleteSelectedAction());
+        view.getSelectAllItem().addActionListener(new SelectAllAction());
+        view.getFindAndReplaceItem().addActionListener(new FindReplaceAction());
     }
 
     private void createUndo() {
@@ -290,9 +295,13 @@ public class MenuBarController {
         public void menuSelected(MenuEvent menuEvent) {
             if (textArea.getSelectedText() == null) {
                 view.getCopyItem().setEnabled(false);
+                view.getDeleteItem().setEnabled(false);
+                view.getCutItem().setEnabled(false);
             }
             else {
                 view.getCopyItem().setEnabled(true);
+                view.getDeleteItem().setEnabled(true);
+                view.getCutItem().setEnabled(true);
             }
             view.getUndoItem().setEnabled(undoManager.canUndo());
             view.getRedoItem().setEnabled(undoManager.canRedo());
@@ -316,6 +325,56 @@ public class MenuBarController {
             StringSelection stringSelection = new StringSelection(myString);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
+        }
+    }
+
+    class DeleteSelectedAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            textArea.replaceSelection("");
+        }
+    }
+
+    class SelectAllAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            textArea.selectAll();
+        }
+    }
+
+    class FindReplaceAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new MigLayout(
+                    "",
+                    "",
+                    ""
+            ));
+            JTextField findText = new JTextField();
+            JTextField replaceText = new JTextField();
+            JLabel findTextLabel = new JLabel("Find text: ");
+            JLabel replaceTextLabel = new JLabel("Replace with text: ");
+
+            panel.add(findTextLabel, "span");
+            panel.add(findText, "span, grow, gapbottom 10");
+            panel.add(replaceTextLabel, "span");
+            panel.add(replaceText, "span, grow");
+
+            int result = JOptionPane.showConfirmDialog(view, panel, "Find and replace",JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+
+            if (result == JOptionPane.OK_OPTION) {
+                String text = textArea.getText();
+                textArea.setText(text.replaceAll( "(\\b" + findText.getText() + "\\b)", replaceText.getText()));
+            }
+        }
+    }
+
+    class CutSelectedAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            new CopySelectedAction().actionPerformed(actionEvent);
+            new DeleteSelectedAction().actionPerformed(actionEvent);
         }
     }
 }

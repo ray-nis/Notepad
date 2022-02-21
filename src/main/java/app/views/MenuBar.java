@@ -9,7 +9,8 @@ public class MenuBar extends JMenuBar {
     JMenuItem newItem, openItem, saveItem, saveAsItem, exitItem;
     JCheckBoxMenuItem worldWrapItem;
     JMenuItem fontItem, colorItem, backgroundColorItem;
-    JMenuItem undoItem, redoItem, pasteItem, copyItem;
+    JMenuItem undoItem, redoItem, pasteItem, copyItem, cutItem, deleteItem, selectAllItem;
+    JMenuItem findAndReplaceItem;
 
     public MenuBar() {
         init();
@@ -46,14 +47,30 @@ public class MenuBar extends JMenuBar {
         redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 
         pasteItem = new JMenuItem("Paste");
-        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+        pasteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
 
         copyItem = new JMenuItem("Copy");
+        copyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+
+        cutItem = new JMenuItem("Cut");
+        cutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+
+        deleteItem = new JMenuItem("Delete");
+        deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+
+        selectAllItem = new JMenuItem("Select all");
+        selectAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+
+        findAndReplaceItem = new JMenuItem("Find and replace text");
 
         editMenu.add(undoItem);
         editMenu.add(redoItem);
         editMenu.add(pasteItem);
         editMenu.add(copyItem);
+        editMenu.add(cutItem);
+        editMenu.add(deleteItem);
+        editMenu.add(selectAllItem);
+        editMenu.add(findAndReplaceItem);
     }
 
     private void createFormatMenu() {
@@ -101,72 +118,28 @@ public class MenuBar extends JMenuBar {
         return fileMenu;
     }
 
-    public void setFileMenu(JMenu fileMenu) {
-        this.fileMenu = fileMenu;
-    }
-
     public JMenu getEditMenu() {
         return editMenu;
-    }
-
-    public void setEditMenu(JMenu editMenu) {
-        this.editMenu = editMenu;
-    }
-
-    public JMenu getFormatMenu() {
-        return formatMenu;
-    }
-
-    public void setFormatMenu(JMenu formatMenu) {
-        this.formatMenu = formatMenu;
-    }
-
-    public JMenu getViewMenu() {
-        return viewMenu;
-    }
-
-    public void setViewMenu(JMenu viewMenu) {
-        this.viewMenu = viewMenu;
     }
 
     public JMenuItem getNewItem() {
         return newItem;
     }
 
-    public void setNewItem(JMenuItem newItem) {
-        this.newItem = newItem;
-    }
-
     public JMenuItem getOpenItem() {
         return openItem;
-    }
-
-    public void setOpenItem(JMenuItem openItem) {
-        this.openItem = openItem;
     }
 
     public JMenuItem getSaveItem() {
         return saveItem;
     }
 
-    public void setSaveItem(JMenuItem saveItem) {
-        this.saveItem = saveItem;
-    }
-
     public JMenuItem getSaveAsItem() {
         return saveAsItem;
     }
 
-    public void setSaveAsItem(JMenuItem saveAsItem) {
-        this.saveAsItem = saveAsItem;
-    }
-
     public JMenuItem getExitItem() {
         return exitItem;
-    }
-
-    public void setExitItem(JMenuItem exitItem) {
-        this.exitItem = exitItem;
     }
 
     public JMenuItem getFontItem() {
@@ -199,5 +172,21 @@ public class MenuBar extends JMenuBar {
 
     public JMenuItem getCopyItem() {
         return copyItem;
+    }
+
+    public JMenuItem getDeleteItem() {
+        return deleteItem;
+    }
+
+    public JMenuItem getSelectAllItem() {
+        return selectAllItem;
+    }
+
+    public JMenuItem getFindAndReplaceItem() {
+        return findAndReplaceItem;
+    }
+
+    public JMenuItem getCutItem() {
+        return cutItem;
     }
 }
